@@ -1,0 +1,6 @@
+@AptiApi_HostAddress = http://localhost:5068
+
+GET {{AptiApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
