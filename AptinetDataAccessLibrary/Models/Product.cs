@@ -36,11 +36,14 @@ namespace AptinetDataAccessLibrary.Models
         public int? tolerance { get; set; }
         public int? insertedWeighted { get; set; }
         public string barcode { get; set; }
+        [JsonIgnore]
         public bool isOffer { get; set; } = false;
         //if barcode count == 13 => normal product
         //if barcode count < 13 => if isPlu true => weightedProduct
         //if barcode count < 13 => if isPlu false => CountedProduct
+        [JsonIgnore]
         public bool? isPlu { get; set; }
+        [JsonIgnore]
         public bool tax { get; set; } = false;
         public string? qrCode { get; set; }
         [JsonPropertyName("Storeid")]

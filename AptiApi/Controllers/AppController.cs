@@ -41,8 +41,7 @@ namespace AptiApi.Controllers
         [HttpGet("download")]
         public ActionResult Download()
         {
-
-            string filePath = "/home/download/aptinet.zip";
+            string filePath = "/home/downloads/aptinet.zip";
             string fileName = "aptinet.zip";
 
             byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
