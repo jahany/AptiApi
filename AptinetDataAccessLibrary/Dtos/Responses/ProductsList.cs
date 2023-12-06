@@ -37,7 +37,7 @@ namespace AptinetDataAccessLibrary.Dtos.Responses
         {
             get
             {
-                if ( base.isOffer == false )
+                if (base.isOffer == false)
                 {
                     return 0;
                 }
@@ -45,6 +45,10 @@ namespace AptinetDataAccessLibrary.Dtos.Responses
                 {
                     return 1;
                 }
+            }
+            set
+            {
+
             }
         }
         //if barcode count == 13 => normal product
@@ -64,6 +68,10 @@ namespace AptinetDataAccessLibrary.Dtos.Responses
                     return 1;
                 }
             }
+            set
+            {
+
+            }
         }
         [JsonPropertyName("tax")]
         public int tax
@@ -78,6 +86,10 @@ namespace AptinetDataAccessLibrary.Dtos.Responses
                 {
                     return 1;
                 }
+            }
+            set
+            {
+             
             }
         }
     }

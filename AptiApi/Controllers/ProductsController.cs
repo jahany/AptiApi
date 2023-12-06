@@ -42,9 +42,9 @@ namespace AptiApi.Controllers
                           tolerance = p.tolerance,
                           insertedWeighted = p.insertedWeighted,
                           barcode = p.barcode,
-                          isOffer = p.isOffer,
-                          isPlu = p.isPlu,
-                          tax = p.tax,
+                          isOffer = p.isOffer == true?1:0,
+                          isPlu = p.isPlu == true ? 1 : 0,
+                          tax = p.tax == true ? 1 : 0,
                           qrCode = p.qrCode,
                           Storeid = p.Storeid
                       };
