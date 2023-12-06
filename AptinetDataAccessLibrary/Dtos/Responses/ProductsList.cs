@@ -33,64 +33,13 @@ namespace AptinetDataAccessLibrary.Dtos.Responses
             }
         }
         [JsonPropertyName("isOffer")]
-        public int isOffer
-        {
-            get
-            {
-                if (base.isOffer == false)
-                {
-                    return 0;
-                }
-                else
-                {
-                    return 1;
-                }
-            }
-            set
-            {
-
-            }
-        }
+        public int isOffer { get; set; }
         //if barcode count == 13 => normal product
         //if barcode count < 13 => if isPlu true => weightedProduct
         //if barcode count < 13 => if isPlu false => CountedProduct
         [JsonPropertyName("isPlu")]
-        public int isPlu
-        {
-            get
-            {
-                if (base.isOffer == false)
-                {
-                    return 0;
-                }
-                else
-                {
-                    return 1;
-                }
-            }
-            set
-            {
-
-            }
-        }
+        public int isPlu { get; set; }
         [JsonPropertyName("tax")]
-        public int tax
-        {
-            get
-            {
-                if (base.isOffer == false)
-                {
-                    return 0;
-                }
-                else
-                {
-                    return 1;
-                }
-            }
-            set
-            {
-             
-            }
-        }
+        public int tax { get; set; }
     }
 }
