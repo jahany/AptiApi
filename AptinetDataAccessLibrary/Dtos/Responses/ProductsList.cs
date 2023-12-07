@@ -21,11 +21,11 @@ namespace AptinetDataAccessLibrary.Dtos.Responses
                 {
                     return "normal";
                 }
-                else if (barcode.Length < 13 && base.isPlu == true)
+                else if (barcode.Length < 13 && isPlu == 1)
                 {
                     return "weighted";
                 }
-                else if (barcode.Length < 13 && base.isPlu == false)
+                else if (barcode.Length < 13 && isPlu == 0)
                 {
                     return "counted";
                 }
