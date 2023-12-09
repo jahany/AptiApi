@@ -49,6 +49,29 @@ namespace AptiApi.Controllers
             return File(fileBytes, "application/force-download", fileName);
 
         }
+
+        [HttpGet("downloadProdpics")]
+        public ActionResult DownloadProdPics()
+        {
+            string filePath = "/home/downloads/prodpics.zip";
+            string fileName = "prodpics.zip";
+
+            byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+
+            return File(fileBytes, "application/force-download", fileName);
+
+        }
+        [HttpGet("downloadUserpics")]
+        public ActionResult downloaduserpics()
+        {
+            string filePath = "/home/downloads/userpics.zip";
+            string fileName = "userpics.zip";
+
+            byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+
+            return File(fileBytes, "application/force-download", fileName);
+
+        }
         [HttpPost("upload-file")]
         public async Task<IActionResult> UploadFile([FromQuery] IFormFile file)
         {
