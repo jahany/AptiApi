@@ -1,5 +1,7 @@
 ﻿using AptinetDataAccessLibrary.DataAccess;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Hosting;
+
 
 namespace AptiApi.Controllers
 {
@@ -7,10 +9,13 @@ namespace AptiApi.Controllers
     [ApiController]
     public class AppController : ControllerBase
     {
+        private Microsoft.AspNetCore.Hosting.IHostingEnvironment Environment;
+
         readonly AP_DBContext _db;
-        public AppController(AP_DBContext db)
+        public AppController(AP_DBContext db, Microsoft.AspNetCore.Hosting.IHostingEnvironment environment)
         {
             _db = db;
+            Environment = environment;
         }
 
         [HttpGet("GetAppVersion")]
@@ -41,7 +46,11 @@ namespace AptiApi.Controllers
         [HttpGet("download")]
         public ActionResult Download()
         {
-            string filePath = "/home/downloads/aptinet.zip";
+            string contentPath = this.Environment.ContentRootPath;
+
+            string filePath = contentPath + "/aptinet.zip";
+
+            //string filePath = "/home/downloads/aptinet.zip";
             string fileName = "aptinet.zip";
 
             byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
@@ -53,7 +62,11 @@ namespace AptiApi.Controllers
         [HttpGet("downloadProdpics")]
         public ActionResult DownloadProdPics()
         {
-            string filePath = "/home/downloads/prodpics.zip";
+            string contentPath = this.Environment.ContentRootPath;
+
+            string filePath = contentPath + "/prodpics.zip";
+
+            //string filePath = "/home/downloads/prodpics.zip";
             string fileName = "prodpics.zip";
 
             byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
@@ -78,9 +91,9 @@ namespace AptiApi.Controllers
             try
             {
                 //20210101
-                // env.WebRootPath = Directory.GetCurrentDirectory();
-                // string uploads = Path.Combine(env.WebRootPath, "home/uploads");
-                string uploads = "/home/uploads";
+                Environment.WebRootPath = Directory.GetCurrentDirectory();
+                string uploads = Path.Combine(Environment.WebRootPath, "uploads");
+                //string uploads = "/home/uploads";
                 string d = DateTime.Now.Day.ToString();
                 if (d.Length == 1)
                 {

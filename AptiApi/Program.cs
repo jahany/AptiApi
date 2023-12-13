@@ -39,7 +39,7 @@ namespace AptiApi
                 var services = scope.ServiceProvider;
 
                 var context = services.GetRequiredService<AP_DBContext>();
-                //context.Database.Migrate();
+                context.Database.Migrate();
                 if (context.Database.GetAppliedMigrations().Any())
                 {
                     context.Database.Migrate();
@@ -52,6 +52,7 @@ namespace AptiApi
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 
