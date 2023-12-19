@@ -12,6 +12,7 @@ namespace AptinetDataAccessLibrary.Models
     {
         public long id { get; set; }
         public Guid Userid { get; set; }
+        public string Email { get; set; }
         public float? totalPrice { get; set; }
         public int? totalCount { get; set; }
         public DateTime regdate { get; set; }
@@ -21,6 +22,5 @@ namespace AptinetDataAccessLibrary.Models
         public string offerCode { get; set; }
         public int rate { get; set; }
         public virtual ICollection<FactorList>? factorList { get; set; }
-
     }
 }

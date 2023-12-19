@@ -1,6 +1,14 @@
 ﻿using AptinetDataAccessLibrary.DataAccess;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Hosting;
+using System.Net;
+using System.Net.Mail;
+using Azure;
+using System;
+using System.Collections.Generic;
+using Azure.Communication.Email;
+using AptinetDataAccessLibrary.Dtos.Requests;
+
 
 
 namespace AptiApi.Controllers
@@ -127,5 +135,65 @@ namespace AptiApi.Controllers
                 return Ok(ex.Message);
             }
         }
+
+        [HttpPost("sendMail")]
+        public string sendMail(SendEmail se)
+        {
+            string connectionString = "endpoint=https://aptinet-com-ser.unitedstates.communication.azure.com/;accesskey=N+W/f/vXl3HdG2yTZKPwS8heHXoEozGxa97+jRZ6n5x/9b33iifOTHrhuimTv67EoByr2YcLhblAwEBDSzLUIw==";
+            var emailClient = new EmailClient(connectionString);
+
+            string p = "";
+            foreach (var item in se.products)
+            {
+                p += "<p> " + item.barcode + " --- " + item.name + "---" + item.count + " --- " + item.productPrice + " --- " + item.productFinalPrice + "---" + item.productTotalFinalPrice + "</p>";
+            }
+            p += "<p>" + se.paymentTime + "</p>";
+            p += "<p>" + se.totalPrice + "</p>";
+            p += "<p>" + se.totalFinalPrice + "</p>";
+            p += "<p>" + se.priceToPay + "</p>";
+
+            string content = "<html>" + p + "</html>";
+            EmailSendOperation emailSendOperation = emailClient.Send(
+              WaitUntil.Completed,
+              senderAddress: "SmartCart@ae6a3057-efab-402f-ab5f-d2c8d59c5fe4.azurecomm.net",
+              recipientAddress: se.emailAddress,
+              subject: "Invoice",
+              htmlContent: content,
+              plainTextContent: "your Reciept");
+
+
+
+
+
+
+
+            //MailAddress to = new MailAddress(mail);
+            //MailAddress from = new MailAddress(from1);
+
+            //MailMessage email = new MailMessage(from, to);
+            //email.Subject = "Testing out email sending";
+            //email.Body = "Hello all the way from the land of C#";
+
+            //SmtpClient smtp = new SmtpClient();
+            //smtp.Host = "localhost";
+            //smtp.Port = 587;
+            //smtp.Credentials = new NetworkCredential("mailuser", "Asmsaf1657");
+            //smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+            //smtp.EnableSsl = false;
+
+            //try
+            //{
+            //    /* Send method called below is what will send off our email 
+            //     * unless an exception is thrown.
+            //     */
+            //    smtp.Send(email);
+            //}
+            //catch (SmtpException ex)
+            //{
+            //    return (ex.ToString());
+            //}
+            return "-1";
+        }
     }
 }
+

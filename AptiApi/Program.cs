@@ -39,7 +39,7 @@ namespace AptiApi
                 var services = scope.ServiceProvider;
 
                 var context = services.GetRequiredService<AP_DBContext>();
-                context.Database.Migrate();
+                //context.Database.Migrate();
                 if (context.Database.GetAppliedMigrations().Any())
                 {
                     context.Database.Migrate();
@@ -47,11 +47,12 @@ namespace AptiApi
             }
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            //if (app.Environment.IsDevelopment())
+            //{
+            //}
+            app.UseSwagger();
+            app.UseSwaggerUI();
+
             app.UseStaticFiles();
 
             app.UseHttpsRedirection();
