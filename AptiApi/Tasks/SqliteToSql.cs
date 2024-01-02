@@ -133,10 +133,10 @@ namespace AptiApi.Tasks
                     //Console.WriteLine("thread " + number.ToString() + " ended");
 
 
-                    var result1 = Cli.Wrap("/python/bin/python")
-            .WithArguments(new[] { "weights_and_irancode_correction.py" })
-            .WithWorkingDirectory("/app")
-            .ExecuteBufferedAsync();
+            //        var result1 = Cli.Wrap("/python/bin/python")
+            //.WithArguments(new[] { "weights_and_irancode_correction.py" })
+            //.WithWorkingDirectory("/app")
+            //.ExecuteBufferedAsync();
 
 
                     //ProcessStartInfo start = new ProcessStartInfo();

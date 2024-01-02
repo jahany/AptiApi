@@ -179,98 +179,79 @@ def merge_weight(weights):
 
 
 if __name__ == "__main__":
-    file = open("quantifiers.txt", "r", encoding="utf-8")
-    lines = file.readlines()
-    qnts = []
-    for line in lines:
-        qnts.append(line[:-1])
-    file.close()
 
-    #conn = pyodbc.connect("Driver={SQL Server};Server=.;Database=APtinet_DataBase;UID=ali;PWD=937PeteryApt;Trusted_Connection=yes;")
-    conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
-                          "Server=localhost,1436;"
-                          "Database=APtinet_DataBase;"
-                          "UID=sa;"
-                          "PWD=Aj253672728282@;")
-    
-    cursor = conn.cursor()
-    print("connection 1")
-    cursor.execute("EXEC PrePareWeightsToProccess")
-    print("read weights")
-    print("start parse data")
-    data = []
-    rows = cursor.fetchall()
-    for row in rows:
-        data.append([x for x in row])
-        print("1")
-    print("end parse data")
-    conn.close()
-    print("connection 1 closed")
-    #conn2 = pyodbc.connect("Driver={SQL Server};Server=.;Database=APtinet_DataBase;UID=ali;PWD=937PeteryApt;Trusted_Connection=yes;")
-    conn2 = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
-                          "Server=localhost,1436;"
-                          "Database=APtinet_DataBase;"
-                          "UID=sa;"
-                          "PWD=Aj253672728282@;")
+    while 1==1:
+        file = open("quantifiers.txt", "r", encoding="utf-8")
+        lines = file.readlines()
+        qnts = []
+        for line in lines:
+            qnts.append(line[:-1])
+        file.close()
 
-    # conn2 = pyodbc.connect(
-    #     "Driver={SQL Server};"
-    #     "Server=(local);"
-    #     "Database=APtinet_DataBase;"
-    #     "Trusted_Connection=yes;"
-    #     "Integrated Security=True;"
-    # )
-    print("connection 2")
-    for index in tqdm(range(len(data))):
-        weight_list = merge_weight(extract_weight(data, index))
-        # print(data[index][0], merge_weight(extract_weight(data, index)))
-        # iran_code = merg_iranecode(extract_irancode(data, index))
-        avg_weight: int = 0
-        tolerance: int = 8
-        inserted_weights: int = 0
-        valid_weights = []
-        for weight in weight_list:
-            if weight >= 8:
-                valid_weights.append(weight)
+        #conn = pyodbc.connect("Driver={SQL Server};Server=.;Database=APtinet_DataBase;UID=ali;PWD=937PeteryApt;Trusted_Connection=yes;")
+        conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
+                              "Server=localhost,1436;"
+                              "Database=APtinet_DataBase;"
+                              "UID=sa;"
+                              "PWD=Aj253672728282@;")
+        
+        cursor = conn.cursor()
+        print("connection 1")
+        cursor.execute("EXEC PrePareWeightsToProccess")
+        print("read weights")
+        print("start parse data")
+        data = []
+        rows = cursor.fetchall()
+        for row in rows:
+            data.append([x for x in row])
+            print("1")
+        print("end parse data")
+        conn.close()
+        print("connection 1 closed")
+        #conn2 = pyodbc.connect("Driver={SQL Server};Server=.;Database=APtinet_DataBase;UID=ali;PWD=937PeteryApt;Trusted_Connection=yes;")
+        conn2 = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
+                              "Server=localhost,1436;"
+                              "Database=APtinet_DataBase;"
+                              "UID=sa;"
+                              "PWD=Aj253672728282@;")
 
-        if len(valid_weights) == 0:
-            estimated_weight = int(estimate_weight(extract_name(data, index), qnts))
-            if estimated_weight > 8:
-                avg_weight = estimated_weight
+        # conn2 = pyodbc.connect(
+        #     "Driver={SQL Server};"
+        #     "Server=(local);"
+        #     "Database=APtinet_DataBase;"
+        #     "Trusted_Connection=yes;"
+        #     "Integrated Security=True;"
+        # )
+        print("connection 2")
+        for index in tqdm(range(len(data))):
+            weight_list = merge_weight(extract_weight(data, index))
+            # print(data[index][0], merge_weight(extract_weight(data, index)))
+            # iran_code = merg_iranecode(extract_irancode(data, index))
+            avg_weight: int = 0
+            tolerance: int = 8
+            inserted_weights: int = 0
+            valid_weights = []
+            for weight in weight_list:
+                if weight >= 8:
+                    valid_weights.append(weight)
+
+            if len(valid_weights) == 0:
+                estimated_weight = int(estimate_weight(extract_name(data, index), qnts))
+                if estimated_weight > 8:
+                    avg_weight = estimated_weight
+                    tolerance = int(max((avg_weight * 0.1), 8))
+                    inserted_weights = 0
+                    weight_list = [estimated_weight, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            elif len(valid_weights) == 1:
+                avg_weight = valid_weights[0]
                 tolerance = int(max((avg_weight * 0.1), 8))
                 inserted_weights = 0
-                weight_list = [estimated_weight, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        elif len(valid_weights) == 1:
-            avg_weight = valid_weights[0]
-            tolerance = int(max((avg_weight * 0.1), 8))
-            inserted_weights = 0
-            weight_list = [valid_weights[0], 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        elif len(valid_weights) == 2:
-            if (
-                abs(valid_weights[0] - valid_weights[1])
-                / (valid_weights[0] + valid_weights[1])
-            ) <= 0.1:
-                avg_weight = int((valid_weights[0] + valid_weights[1]) / 2)
-                tolerance = int(max((abs(valid_weights[0] - avg_weight)), 8))
-                inserted_weights = 2
-                weight_list = [
-                    valid_weights[0],
-                    valid_weights[1],
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                ]
-            else:
-                estimated_weight = int(estimate_weight(extract_name(data, index), qnts))
-                temp_weights = merge_weight(
-                    [valid_weights[0], valid_weights[1], estimated_weight]
-                )
-                if len(temp_weights) == 3:
+                weight_list = [valid_weights[0], 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            elif len(valid_weights) == 2:
+                if (
+                    abs(valid_weights[0] - valid_weights[1])
+                    / (valid_weights[0] + valid_weights[1])
+                ) <= 0.1:
                     avg_weight = int((valid_weights[0] + valid_weights[1]) / 2)
                     tolerance = int(max((abs(valid_weights[0] - avg_weight)), 8))
                     inserted_weights = 2
@@ -287,49 +268,70 @@ if __name__ == "__main__":
                         0,
                     ]
                 else:
-                    if temp_weights[0] == estimated_weight:
-                        avg_weight = temp_weights[1]
-                        tolerance = int(max((avg_weight * 0.1), 8))
-                        inserted_weights = 0
-                        weight_list = [valid_weights[0], 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    estimated_weight = int(estimate_weight(extract_name(data, index), qnts))
+                    temp_weights = merge_weight(
+                        [valid_weights[0], valid_weights[1], estimated_weight]
+                    )
+                    if len(temp_weights) == 3:
+                        avg_weight = int((valid_weights[0] + valid_weights[1]) / 2)
+                        tolerance = int(max((abs(valid_weights[0] - avg_weight)), 8))
+                        inserted_weights = 2
+                        weight_list = [
+                            valid_weights[0],
+                            valid_weights[1],
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                        ]
                     else:
-                        avg_weight = temp_weights[0]
-                        tolerance = int(max((avg_weight * 0.1), 8))
-                        inserted_weights = 0
-                        weight_list = [valid_weights[1], 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        else:
-            avg_weight = int(sum(valid_weights) / len(valid_weights))
-            tolerance = max(
-                (max(valid_weights) - avg_weight),
-                (avg_weight - min(valid_weights)),
-                (avg_weight * 0.1),
-                8,
+                        if temp_weights[0] == estimated_weight:
+                            avg_weight = temp_weights[1]
+                            tolerance = int(max((avg_weight * 0.1), 8))
+                            inserted_weights = 0
+                            weight_list = [valid_weights[0], 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                        else:
+                            avg_weight = temp_weights[0]
+                            tolerance = int(max((avg_weight * 0.1), 8))
+                            inserted_weights = 0
+                            weight_list = [valid_weights[1], 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            else:
+                avg_weight = int(sum(valid_weights) / len(valid_weights))
+                tolerance = max(
+                    (max(valid_weights) - avg_weight),
+                    (avg_weight - min(valid_weights)),
+                    (avg_weight * 0.1),
+                    8,
+                )
+                inserted_weights = len(valid_weights)
+
+            query = "EXEC Insert_Weights @Barcode= ?, @w1 = ?, @w2 = ?, @w3 = ?, @w4 = ?, @w5 = ?, @w6 = ?, @w7 = ?, @w8 = ?, @w9 = ?, @w10 = ?, @mean = ?, @tolerance = ?, @insertedweight = ?, @irancode = ?"
+            params = (
+                data[index][0],
+                weight_list[0],
+                weight_list[1],
+                weight_list[2],
+                weight_list[3],
+                weight_list[4],
+                weight_list[5],
+                weight_list[6],
+                weight_list[7],
+                weight_list[8],
+                weight_list[9],
+                avg_weight,
+                tolerance,
+                inserted_weights,
+                "",
             )
-            inserted_weights = len(valid_weights)
 
-        query = "EXEC Insert_Weights @Barcode= ?, @w1 = ?, @w2 = ?, @w3 = ?, @w4 = ?, @w5 = ?, @w6 = ?, @w7 = ?, @w8 = ?, @w9 = ?, @w10 = ?, @mean = ?, @tolerance = ?, @insertedweight = ?, @irancode = ?"
-        params = (
-            data[index][0],
-            weight_list[0],
-            weight_list[1],
-            weight_list[2],
-            weight_list[3],
-            weight_list[4],
-            weight_list[5],
-            weight_list[6],
-            weight_list[7],
-            weight_list[8],
-            weight_list[9],
-            avg_weight,
-            tolerance,
-            inserted_weights,
-            "",
-        )
-
-        print(params)
-        with conn2.cursor() as cur:
-            cur.execute(query, params)
-        # print("update weights for barcode: ", data[index][0], index)
+            print(params)
+            with conn2.cursor() as cur:
+                cur.execute(query, params)
+            # print("update weights for barcode: ", data[index][0], index)
 
     conn2.close()
     exit()
