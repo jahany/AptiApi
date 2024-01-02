@@ -139,19 +139,19 @@ namespace AptiApi.Tasks
             .ExecuteBufferedAsync();
 
 
-                    ProcessStartInfo start = new ProcessStartInfo();
-                    start.FileName = "/python/bin/python";
-                    start.Arguments = string.Format("{0} {1}", Directory.GetCurrentDirectory() + "\\weights_and_irancode_correction.py", "");
-                    start.UseShellExecute = false;
-                    start.RedirectStandardOutput = true;
-                    using (Process process = Process.Start(start))
-                    {
-                        using (StreamReader reader = process.StandardOutput)
-                        {
-                            string result = reader.ReadToEnd();
-                            Console.Write(result);
-                        }
-                    }
+                    //ProcessStartInfo start = new ProcessStartInfo();
+                    //start.FileName = "/python/bin/python";
+                    //start.Arguments = string.Format("{0} {1}", Directory.GetCurrentDirectory() + "\\weights_and_irancode_correction.py", "");
+                    //start.UseShellExecute = false;
+                    //start.RedirectStandardOutput = true;
+                    //using (Process process = Process.Start(start))
+                    //{
+                    //    using (StreamReader reader = process.StandardOutput)
+                    //    {
+                    //        string result = reader.ReadToEnd();
+                    //        Console.Write(result);
+                    //    }
+                    //}
 
                     try
                     {
