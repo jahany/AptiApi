@@ -44,8 +44,8 @@ namespace AptiApi.Tasks
             _logger.LogInformation("test");
             List<Thread> workerThreads = new List<Thread>();
             Environment.WebRootPath = Directory.GetCurrentDirectory();
-            Directory.CreateDirectory("uploads");
-            string uploads = Path.Combine(Environment.WebRootPath, "uploads");
+            Directory.CreateDirectory("/home/uploads");
+            string uploads = Path.Combine(Environment.WebRootPath, "/home/uploads");
 
 
             string rootPath = uploads;

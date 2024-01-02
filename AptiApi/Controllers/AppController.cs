@@ -59,9 +59,9 @@ namespace AptiApi.Controllers
         {
             string contentPath = this.Environment.ContentRootPath;
 
-            string filePath = contentPath + "/aptinet.zip";
+            //string filePath = contentPath + "/aptinet.zip";
 
-            //string filePath = "/home/downloads/aptinet.zip";
+            string filePath = "/home/downloads/aptinet.zip";
             string fileName = "aptinet.zip";
 
             byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
@@ -75,9 +75,9 @@ namespace AptiApi.Controllers
         {
             string contentPath = this.Environment.ContentRootPath;
 
-            string filePath = contentPath + "/prodpics.zip";
+            //string filePath = contentPath + "/prodpics.zip";
 
-            //string filePath = "/home/downloads/prodpics.zip";
+            string filePath = "/home/downloads/prodpics.zip";
             string fileName = "prodpics.zip";
 
             byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
@@ -103,8 +103,8 @@ namespace AptiApi.Controllers
             {
                 //20210101
                 Environment.WebRootPath = Directory.GetCurrentDirectory();
-                string uploads = Path.Combine(Environment.WebRootPath, "uploads");
-                //string uploads = "/home/uploads";
+                //string uploads = Path.Combine(Environment.WebRootPath, "uploads");
+                string uploads = "/home/uploads";
                 string d = DateTime.Now.Day.ToString();
                 if (d.Length == 1)
                 {
