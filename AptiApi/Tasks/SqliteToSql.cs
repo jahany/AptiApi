@@ -131,7 +131,7 @@ namespace AptiApi.Tasks
                     //Console.WriteLine("thread " + number.ToString() + " ended");
 
                     ProcessStartInfo start = new ProcessStartInfo();
-                    start.FileName = "C:\\Users\\ali\\AppData\\Local\\Programs\\Python\\Python312\\python.exe";
+                    start.FileName = "/python/bin/python";
                     start.Arguments = string.Format("{0} {1}", Directory.GetCurrentDirectory() + "\\weights_and_irancode_correction.py", "");
                     start.UseShellExecute = false;
                     start.RedirectStandardOutput = true;
