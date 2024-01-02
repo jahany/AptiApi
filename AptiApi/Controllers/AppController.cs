@@ -8,6 +8,9 @@ using System;
 using System.Collections.Generic;
 using Azure.Communication.Email;
 using AptinetDataAccessLibrary.Dtos.Requests;
+using AptinetDataAccessLibrary.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Text.Json.Serialization;
 
 
 
@@ -122,7 +125,7 @@ namespace AptiApi.Controllers
 
                 if (file.Length > 0)
                 {
-                    string filePath = Path.Combine(resDirectory, file.FileName);
+                    string filePath = Path.Combine(resDirectory, file.FileName + new Guid());
                     using (Stream fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         await file.CopyToAsync(fileStream);
@@ -136,6 +139,49 @@ namespace AptiApi.Controllers
             }
         }
 
+        [HttpPost("saveFactor")]
+        public string saveFactor(SendEmail se)
+        {
+            try
+            {
+                Factor f = new Factor();
+                f.Userid = se.userId;
+                f.totalPrice = se.totalPrice;
+                f.totalCount = se.totalCount;
+                f.regdate = DateTime.UtcNow;
+                f.Storeid = 1;
+                f.basketName = se.basketName;
+                f.offerCode = se.coupon;
+                List<FactorList> l = new List<FactorList>();
+                foreach (var item in se.products)
+                {
+                    FactorList fl = new FactorList();
+                    if (_db.Product.Where(x => x.barcode == item.barcode).FirstOrDefault() != null)
+                    {
+                        fl.Productid = _db.Product.Where(x => x.barcode == item.barcode).FirstOrDefault().id;
+                        fl.count = item.count;
+                        fl.weight = item.weight;
+                        fl.Factorid = 1;
+                        fl.productPrice = item.productPrice;
+                        fl.productTotalPrice = item.productTotalPrice;
+                        fl.productFinalPrice = item.productFinalPrice;
+                        fl.productTotalFinalPrice = item.productTotalFinalPrice;
+                        fl.productSaving = item.productSaving;
+                        fl.productTax = item.productTax;
+                        l.Add(fl);
+                    }
+                }
+                f.factorList = l;
+                _db.Factor.Add(f);
+                _db.SaveChanges();
+            }
+            catch
+            {
+                return "-1";
+            }
+            return "1";
+        }
+
         [HttpPost("sendMail")]
         public string sendMail(SendEmail se)
         {
@@ -145,14 +191,27 @@ namespace AptiApi.Controllers
             string p = "";
             foreach (var item in se.products)
             {
-                p += "<p> " + item.barcode + " --- " + item.name + "---" + item.count + " --- " + item.productPrice + " --- " + item.productFinalPrice + "---" + item.productTotalFinalPrice + "</p>";
+                p += "<tr>";
+                p += "<td>" + item.name + "</td>";
+                p += "<td>" + item.productTotalFinalPrice + "</td>";
+                p += "</tr>";
             }
-            p += "<p>" + se.paymentTime + "</p>";
-            p += "<p>" + se.totalPrice + "</p>";
-            p += "<p>" + se.totalFinalPrice + "</p>";
-            p += "<p>" + se.priceToPay + "</p>";
+            p += "<tr>";
+            p += "<td>SUBTOTAL</td>";
+            p += "<td>" + se.totalFinalPrice + "</td>";
+            p += "</tr>";
 
-            string content = "<html>" + p + "</html>";
+            p += "<tr>";
+            p += "<td>TAX</td>";
+            p += "<td>" + se.totalTax + "</td>";
+            p += "</tr>";
+
+            p += "<tr>";
+            p += "<td>TOTAL</td>";
+            p += "<td>" + se.priceToPay + "</td>";
+            p += "</tr>";
+
+            string content = "<html><style>table, th, td {border:1px solid black;}</style><body> <table> " + p + " </table></body> </html>";
             EmailSendOperation emailSendOperation = emailClient.Send(
               WaitUntil.Completed,
               senderAddress: "SmartCart@ae6a3057-efab-402f-ab5f-d2c8d59c5fe4.azurecomm.net",

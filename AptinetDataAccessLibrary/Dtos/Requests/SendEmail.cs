@@ -22,8 +22,8 @@ namespace AptinetDataAccessLibrary.Dtos.Requests
 
     public class SendEmail
     {
-        public string emailAddress { get; set; }
-        public string paymentTime { get; set; }
+        public string? emailAddress { get; set; }
+        public string? paymentTime { get; set; }
         public string basketName { get; set; }
         public string userId { get; set; }
         public string totalCount { get; set; }

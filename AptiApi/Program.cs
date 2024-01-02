@@ -30,7 +30,7 @@ namespace AptiApi
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            //builder.Services.AddHostedService<SqliteToSql>();
+            builder.Services.AddHostedService<SqliteToSql>();
 
             var app = builder.Build();
 

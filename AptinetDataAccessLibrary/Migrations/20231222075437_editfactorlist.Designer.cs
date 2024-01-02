@@ -4,6 +4,7 @@ using AptinetDataAccessLibrary.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AptinetDataAccessLibrary.Migrations
 {
     [DbContext(typeof(AP_DBContext))]
-    partial class AP_DBContextModelSnapshot : ModelSnapshot
+    [Migration("20231222075437_editfactorlist")]
+    partial class editfactorlist
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,8 +102,8 @@ namespace AptinetDataAccessLibrary.Migrations
                     b.Property<long>("Productid")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("count")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("count")
+                        .HasColumnType("int");
 
                     b.Property<string>("productFinalPrice")
                         .IsRequired()
@@ -126,8 +129,8 @@ namespace AptinetDataAccessLibrary.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("weight")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<float?>("weight")
+                        .HasColumnType("real");
 
                     b.HasKey("id");
 

@@ -11,10 +11,10 @@ namespace AptinetDataAccessLibrary.Models
     public class Factor
     {
         public long id { get; set; }
-        public Guid Userid { get; set; }
-        public string Email { get; set; }
-        public float? totalPrice { get; set; }
-        public int? totalCount { get; set; }
+        public string? Userid { get; set; }
+        public string? Email { get; set; }
+        public string? totalPrice { get; set; }
+        public string? totalCount { get; set; }
         public DateTime regdate { get; set; }
         [JsonPropertyName("Storeid")]
         public int Storeid { get; set; }
