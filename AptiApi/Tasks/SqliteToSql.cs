@@ -35,13 +35,13 @@ namespace AptiApi.Tasks
 
             _logger.LogInformation(" Hosted Service running.");
 
-            _timer = new Timer(DoWorkAsync, null, TimeSpan.Zero,
+            _timer = new Timer(DoWork, null, TimeSpan.Zero,
                 TimeSpan.FromMinutes(1));
 
             return Task.CompletedTask;
         }
 
-        private async Task DoWorkAsync(object? state)
+        private void DoWork(object? state)
         {
             _logger.LogInformation("test");
             List<Thread> workerThreads = new List<Thread>();
@@ -131,31 +131,27 @@ namespace AptiApi.Tasks
                     //}
 
                     //Console.WriteLine("thread " + number.ToString() + " ended");
-                    var result = await Cli.Wrap("/python/bin/python")
-                                .WithArguments(new[] { "weights_and_irancode_correction.py", "arg1", "arg2" })
-                                .WithWorkingDirectory("/app")
-                                .ExecuteBufferedAsync();
-
-                    var output = result.StandardOutput;
-                    // do something with the output
 
 
+                    var result1 = Cli.Wrap("/python/bin/python")
+            .WithArguments(new[] { "weights_and_irancode_correction.py" })
+            .WithWorkingDirectory("/app")
+            .ExecuteBufferedAsync();
 
 
-
-                    //ProcessStartInfo start = new ProcessStartInfo();
-                    //start.FileName = "/python/bin/python";
-                    //start.Arguments = string.Format("{0} {1}", Directory.GetCurrentDirectory() + "\\weights_and_irancode_correction.py", "");
-                    //start.UseShellExecute = false;
-                    //start.RedirectStandardOutput = true;
-                    //using (Process process = Process.Start(start))
-                    //{
-                    //    using (StreamReader reader = process.StandardOutput)
-                    //    {
-                    //        string result = reader.ReadToEnd();
-                    //        Console.Write(result);
-                    //    }
-                    //}
+                    ProcessStartInfo start = new ProcessStartInfo();
+                    start.FileName = "/python/bin/python";
+                    start.Arguments = string.Format("{0} {1}", Directory.GetCurrentDirectory() + "\\weights_and_irancode_correction.py", "");
+                    start.UseShellExecute = false;
+                    start.RedirectStandardOutput = true;
+                    using (Process process = Process.Start(start))
+                    {
+                        using (StreamReader reader = process.StandardOutput)
+                        {
+                            string result = reader.ReadToEnd();
+                            Console.Write(result);
+                        }
+                    }
 
                     try
                     {
