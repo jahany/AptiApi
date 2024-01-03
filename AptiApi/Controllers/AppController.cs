@@ -125,7 +125,12 @@ namespace AptiApi.Controllers
 
                 if (file.Length > 0)
                 {
-                    string filePath = Path.Combine(resDirectory, file.FileName + new Guid());
+                    Random random = new Random();
+
+                    const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                    string x = new string(Enumerable.Repeat(chars, 5)
+                        .Select(s => s[random.Next(s.Length)]).ToArray());
+                    string filePath = Path.Combine(resDirectory, file.FileName + x + ".db");
                     using (Stream fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         await file.CopyToAsync(fileStream);

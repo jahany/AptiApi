@@ -118,6 +118,7 @@ namespace AptiApi.Tasks
                         _db.Weights.Add(product);
                         _db.SaveChanges();
                     }
+                    rdr.Close();
 
                     //try
                     //{

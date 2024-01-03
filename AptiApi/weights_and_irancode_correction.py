@@ -1,3 +1,4 @@
+import time
 from numpy import array, percentile, sort
 import pyodbc
 from tqdm import tqdm
@@ -333,5 +334,5 @@ if __name__ == "__main__":
                 cur.execute(query, params)
             # print("update weights for barcode: ", data[index][0], index)
 
-    conn2.close()
-    exit()
+        conn2.close()
+        time.sleep(60)
