@@ -36,7 +36,7 @@ namespace AptiApi.Tasks
             _logger.LogInformation(" Hosted Service running.");
 
             _timer = new Timer(DoWork, null, TimeSpan.Zero,
-                TimeSpan.FromMinutes(1));
+                TimeSpan.FromMinutes(10));
 
             return Task.CompletedTask;
         }

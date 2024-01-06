@@ -190,9 +190,6 @@ namespace AptiApi.Controllers
         [HttpPost("sendMail")]
         public string sendMail(SendEmail se)
         {
-            string connectionString = "endpoint=https://aptinet-com-ser.unitedstates.communication.azure.com/;accesskey=N+W/f/vXl3HdG2yTZKPwS8heHXoEozGxa97+jRZ6n5x/9b33iifOTHrhuimTv67EoByr2YcLhblAwEBDSzLUIw==";
-            var emailClient = new EmailClient(connectionString);
-
             string p = "";
             foreach (var item in se.products)
             {
@@ -217,13 +214,30 @@ namespace AptiApi.Controllers
             p += "</tr>";
 
             string content = "<html><style>table, th, td {border:1px solid black;}</style><body> <table> " + p + " </table></body> </html>";
-            EmailSendOperation emailSendOperation = emailClient.Send(
-              WaitUntil.Completed,
-              senderAddress: "SmartCart@ae6a3057-efab-402f-ab5f-d2c8d59c5fe4.azurecomm.net",
-              recipientAddress: se.emailAddress,
-              subject: "Invoice",
-              htmlContent: content,
-              plainTextContent: "your Reciept");
+
+            ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
+
+            using (var client = new SmtpClient("104.238.213.232"))
+            {
+                client.Port = 1587;
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential("aptinet", "1053768140320@");
+                //client.EnableSsl = true;
+                //client.StartTls();
+
+                var fromAddress = new MailAddress("aptinet@app.aptinet.com");
+                var toAddress = new MailAddress(se.emailAddress);
+                using (var message = new MailMessage(fromAddress, toAddress)
+                {
+                    Subject = "Invoice",
+                    Body = content,
+                    IsBodyHtml = true
+                })
+                {
+                    client.Send(message);
+                }
+            }
+
 
 
 
